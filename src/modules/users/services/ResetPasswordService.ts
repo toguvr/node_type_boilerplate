@@ -1,8 +1,6 @@
 import AppError from '@shared/errors/AppError';
 import { inject, injectable } from 'tsyringe';
-import IMailProvider from '@shared/container/providers/MailProvider/models/MailProviders';
-import { differenceInHours, addHours, isAfter } from 'date-fns';
-import User from '../infra/typeorm/entities/User';
+import { addHours, isAfter } from 'date-fns';
 import IUsersRepository from '../repositories/IUsersRepository';
 import IUserTokensRepository from '../repositories/IUserTokensRepository';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
