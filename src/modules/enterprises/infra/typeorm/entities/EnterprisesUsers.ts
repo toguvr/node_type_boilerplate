@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
-import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprise';
+import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
 import Users from '@modules/users/infra/typeorm/entities/User';
 
 @Index('accepted', ['accepted'], {})

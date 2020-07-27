@@ -6,7 +6,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprise';
+import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
 import UserPlans from '@modules/plans/infra/typeorm/entities/PlansUsers';
 
 @Index('plans_enterprises_enterprise_id_fk', ['enterpriseId'], {})

@@ -4,7 +4,7 @@ import { Exclude, Expose } from 'class-transformer';
 import UserPlans from '@modules/plans/infra/typeorm/entities/PlansUsers';
 import Usertoken from '@modules/users/infra/typeorm/entities/UserToken';
 import UsersEnterprises from '@modules/enterprises/infra/typeorm/entities/EnterprisesUsers';
-import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprise';
+import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
 import Appointments from '@modules/appointments/infra/typeorm/entities/Appointment';
 
 @Index('email', ['email'], { unique: true })

@@ -1,8 +1,8 @@
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
-import Enterprise from '@modules/enterprises/infra/typeorm/entities/Enterprise';
-import User from '@modules/users/infra/typeorm/entities/User';
-import Plan from '@modules/plans/infra/typeorm/entities/Plan';
+import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
+import Users from '@modules/users/infra/typeorm/entities/User';
+import Plans from '@modules/plans/infra/typeorm/entities/Plan';
 
 @Index('active', ['active'], {})
 @Index('user_plans_users_id_fk', ['userId'], {})

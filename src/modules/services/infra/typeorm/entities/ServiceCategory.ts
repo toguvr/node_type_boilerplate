@@ -1,5 +1,3 @@
-import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprise';
-import Services from '@modules/services/infra/typeorm/entities/Service';
 import {
   Column,
   Entity,
@@ -8,6 +6,8 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
+import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
+import Services from '@modules/services/infra/typeorm/entities/Service';
 
 @Index('enterprise_categories_enterprise_id_fk', ['enterpriseId'], {})
 @Entity('servicecategory', { schema: 'nahora' })
