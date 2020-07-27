@@ -1,60 +1,66 @@
-import {
-  Entity,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  JoinColumn,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 
 import Enterprise from '@modules/enterprises/infra/typeorm/entities/Enterprise';
 import User from '@modules/users/infra/typeorm/entities/User';
 import Plan from '@modules/plans/infra/typeorm/entities/Plan';
 
-@Entity('plans_users')
-class PlansUsers {
-  @PrimaryGeneratedColumn('uuid')
+@Index('active', ['active'], {})
+@Index('user_plans_users_id_fk', ['userId'], {})
+@Index('user_plans_plans_id_fk', ['planId'], {})
+@Index('user_plans_enterprise_id_fk', ['enterpriseId'], {})
+@Entity('user_plans', { schema: 'nahora' })
+export default class UserPlans {
+  @Column('varchar', { primary: true, name: 'id', length: 255 })
   id: string;
 
-  @Column()
-  enterprise_id: string;
+  @Column('varchar', { name: 'user_id', length: 255 })
+  userId: string;
 
-  @ManyToOne(() => Enterprise)
-  @JoinColumn({ name: 'enterprise_id' })
-  enterprise: Enterprise;
+  @Column('varchar', { name: 'plan_id', length: 255 })
+  planId: string;
 
-  @Column()
-  user_id: string;
+  @Column('varchar', { name: 'enterprise_id', length: 255 })
+  enterpriseId: string;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  @Column('datetime', { name: 'created_at' })
+  createdAt: Date;
 
-  @Column()
-  plan_id: string;
+  @Column('datetime', {
+    name: 'updated_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 
-  @ManyToOne(() => Plan)
-  @JoinColumn({ name: 'plan_id' })
-  plan: Plan;
+  @Column('datetime', { name: 'canceled_at', nullable: true })
+  canceledAt: Date | null;
 
-  @Column()
-  active: boolean;
+  @Column('datetime', { name: 'paused_at', nullable: true })
+  pausedAt: Date | null;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @Column('datetime', { name: 'expiration_at', nullable: true })
+  expirationAt: Date | null;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @Column('tinyint', { name: 'active', unsigned: true, default: () => "'1'" })
+  active: number;
 
-  @Column('timestamp with time zone')
-  canceled_at: Date;
+  @ManyToOne(() => Enterprises, enterprises => enterprises.userPlans, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'enterprise_id', referencedColumnName: 'id' }])
+  enterprise: Enterprises;
 
-  @Column('timestamp with time zone')
-  expiration_at: Date;
+  @ManyToOne(() => Plans, plans => plans.userPlans, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'plan_id', referencedColumnName: 'id' }])
+  plan: Plans;
 
-  @Column('timestamp with time zone')
-  paused_at: Date;
+  @ManyToOne(() => Users, users => users.userPlans, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
+  user: Users;
 }
-
-export default PlansUsers;

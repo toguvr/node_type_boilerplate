@@ -1,43 +1,47 @@
-import {
-  Entity,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  JoinColumn,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprise';
+import Users from '@modules/users/infra/typeorm/entities/User';
 
-import Enterprise from '@modules/enterprises/infra/typeorm/entities/Enterprise';
-import User from '@modules/users/infra/typeorm/entities/User';
-
-@Entity('orders_products')
-class EnterprisesUsers {
-  @PrimaryGeneratedColumn('uuid')
+@Index('accepted', ['accepted'], {})
+@Index('users_enterprises_enterprise_id_fk', ['enterpriseId'], {})
+@Index('users_enterprises_user_id_fk', ['userId'], {})
+@Entity('users_enterprises', { schema: 'nahora' })
+export default class UsersEnterprises {
+  @Column('varchar', { primary: true, name: 'id', length: 36 })
   id: string;
 
-  @Column()
-  enterprise_id: string;
+  @Column('varchar', { name: 'enterprise_id', length: 255 })
+  enterpriseId: string;
 
-  @ManyToOne(() => Enterprise)
-  @JoinColumn({ name: 'enterprise_id' })
-  enterprise: Enterprise;
+  @Column('varchar', { name: 'user_id', length: 255 })
+  userId: string;
 
-  @Column()
-  user_id: string;
+  @Column('tinyint', { name: 'accepted', unsigned: true, default: () => "'0'" })
+  accepted: number;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  @Column('timestamp', {
+    name: 'created_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
-  @Column()
-  accepted: boolean;
+  @Column('timestamp', {
+    name: 'updated_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @ManyToOne(() => Enterprises, enterprises => enterprises.usersEnterprises, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'enterprise_id', referencedColumnName: 'id' }])
+  enterprise: Enterprises;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @ManyToOne(() => Users, users => users.usersEnterprises, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
+  user: Users;
 }
-
-export default EnterprisesUsers;

@@ -1,29 +1,34 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  Generated,
-} from 'typeorm';
+import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import Users from '@modules/users/infra/typeorm/entities/User';
 
-@Entity('user_tokens')
-class UserToken {
-  @PrimaryGeneratedColumn('uuid')
+@Index('user_id', ['userId'], {})
+@Entity('usertoken', { schema: 'nahora' })
+export default class Usertoken {
+  @Column('varchar', { primary: true, name: 'id', length: 36 })
   id: string;
 
-  @Column()
-  @Generated('uuid')
+  @Column('varchar', { name: 'token', length: 255 })
   token: string;
 
-  @Column()
-  user_id: string;
+  @Column('varchar', { name: 'user_id', length: 255 })
+  userId: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @Column('timestamp', {
+    name: 'created_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @Column('timestamp', {
+    name: 'updated_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
+
+  @ManyToOne(() => Users, users => users.usertokens, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
+  user: Users;
 }
-
-export default UserToken;

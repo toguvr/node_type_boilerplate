@@ -1,27 +1,29 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
+import Services from '@modules/services/infra/typeorm/entities/Service';
 
-@Entity('serviceDescriptions')
-class ServiceDescription {
-  @PrimaryGeneratedColumn('uuid')
+@Entity('servicedescription', { schema: 'nahora' })
+export default class Servicedescription {
+  @Column('varchar', { primary: true, name: 'id', length: 36 })
   id: string;
 
-  @Column()
+  @Column('varchar', { name: 'title', length: 255 })
   title: string;
 
-  @Column()
+  @Column('varchar', { name: 'description', length: 255 })
   description: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @Column('timestamp', {
+    name: 'created_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @Column('timestamp', {
+    name: 'updated_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
+
+  @OneToMany(() => Services, services => services.description)
+  services: Services[];
 }
-
-export default ServiceDescription;

@@ -1,57 +1,79 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
+  Entity,
+  Index,
   JoinColumn,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm';
-import ServiceDescription from '@modules/services/infra/typeorm/entities/ServiceDescription';
-import ServiceCategory from '@modules/services/infra/typeorm/entities/ServiceCategory';
+import Servicedescription from '@modules/services/infra/typeorm/entities/ServiceDescription';
+import Servicecategory from '@modules/services/infra/typeorm/entities/ServiceCategory';
+import Appointments from '@modules/appointments/infra/typeorm/entities/Appointment';
 
-@Entity('appointments')
-class Service {
-  @PrimaryGeneratedColumn('uuid')
+@Index('pending_scheduling', ['pendingScheduling'], {})
+@Index('service_categories_category_id_fk', ['categoryId'], {})
+@Index('service_descriptions_description_id_fk', ['descriptionId'], {})
+@Entity('services', { schema: 'nahora' })
+export default class Services {
+  @Column('varchar', { primary: true, name: 'id', length: 36 })
   id: string;
 
-  @Column()
+  @Column('varchar', { name: 'start_hour', length: 255 })
   startHour: string;
 
-  @Column()
-  description_id: string;
+  @Column('varchar', { name: 'description_id', length: 255 })
+  descriptionId: string;
 
-  @ManyToOne(() => ServiceDescription)
-  @JoinColumn({ name: 'description_id' })
-  description: ServiceDescription;
+  @Column('varchar', { name: 'category_id', length: 255 })
+  categoryId: string;
 
-  @Column()
-  category_id: string;
-
-  @ManyToOne(() => ServiceCategory)
-  @JoinColumn({ name: 'category_id' })
-  category: ServiceCategory;
-
-  @Column('integer')
+  @Column('int', { name: 'capacity', unsigned: true })
   capacity: number;
 
-  @Column('integer')
+  @Column('int', { name: 'day_week', unsigned: true })
   dayWeek: number;
 
-  @Column()
-  pending_scheduling: boolean;
+  @Column('tinyint', {
+    name: 'pending_scheduling',
+    unsigned: true,
+    default: () => "'0'",
+  })
+  pendingScheduling: number;
 
-  @Column()
-  time_schedule: string;
+  @Column('varchar', { name: 'time_schedule', length: 255 })
+  timeSchedule: string;
 
-  @Column()
-  user_name: string;
+  @Column('varchar', { name: 'user_name', length: 255 })
+  userName: string;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @Column('timestamp', {
+    name: 'created_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @Column('timestamp', {
+    name: 'updated_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
+
+  @OneToMany(() => Appointments, appointments => appointments.service)
+  appointments: Appointments[];
+
+  @ManyToOne(
+    () => Servicecategory,
+    servicecategory => servicecategory.services,
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
+  )
+  @JoinColumn([{ name: 'category_id', referencedColumnName: 'id' }])
+  category: Servicecategory;
+
+  @ManyToOne(
+    () => Servicedescription,
+    servicedescription => servicedescription.services,
+    { onDelete: 'RESTRICT', onUpdate: 'RESTRICT' },
+  )
+  @JoinColumn([{ name: 'description_id', referencedColumnName: 'id' }])
+  description: Servicedescription;
 }
-
-export default Service;

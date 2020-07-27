@@ -1,43 +1,54 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
-  UpdateDateColumn,
-  ManyToOne,
+  Entity,
+  Index,
   JoinColumn,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm';
-import Enterprise from '@modules/enterprises/infra/typeorm/entities/Enterprise';
+import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprise';
+import UserPlans from '@modules/plans/infra/typeorm/entities/PlansUsers';
 
-@Entity('plans')
-class Plan {
-  @PrimaryGeneratedColumn('uuid')
+@Index('plans_enterprises_enterprise_id_fk', ['enterpriseId'], {})
+@Entity('plans', { schema: 'nahora' })
+export default class Plans {
+  @Column('varchar', { primary: true, name: 'id', length: 36 })
   id: string;
 
-  @Column()
+  @Column('varchar', { name: 'name', length: 255 })
   name: string;
 
-  @Column()
-  enterprise_id: string;
+  @Column('varchar', { name: 'enterprise_id', length: 255 })
+  enterpriseId: string;
 
-  @ManyToOne(() => Enterprise)
-  @JoinColumn({ name: 'enterprise_id' })
-  enterprise: Enterprise;
+  @Column('decimal', { name: 'price', precision: 10, scale: 2 })
+  price: string;
 
-  @Column({ type: 'numeric', precision: 10, scale: 2 })
-  price: number;
+  @Column('int', { name: 'schedule_limit', unsigned: true })
+  scheduleLimit: number;
 
-  @Column('integer')
-  schedule_limit: number;
+  @Column('timestamp', {
+    name: 'created_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  createdAt: Date;
 
-  @Column('timestamp with time zone')
-  expiration_date: Date;
+  @Column('timestamp', {
+    name: 'updated_at',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
+  updatedAt: Date;
 
-  @CreateDateColumn()
-  created_at: Date;
+  @Column('datetime', { name: 'expiration_date' })
+  expirationDate: Date;
 
-  @UpdateDateColumn()
-  updated_at: Date;
+  @ManyToOne(() => Enterprises, enterprises => enterprises.plans, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'enterprise_id', referencedColumnName: 'id' }])
+  enterprise: Enterprises;
+
+  @OneToMany(() => UserPlans, userPlans => userPlans.plan)
+  userPlans: UserPlans[];
 }
-
-export default Plan;
