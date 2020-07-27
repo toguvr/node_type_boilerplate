@@ -4,8 +4,12 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
+  JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import uploadConfig from '@config/upload';
+import EnterprisesUsers from '@modules/enterprises/infra/typeorm/entities/EnterprisesUsers';
 import { Exclude, Expose } from 'class-transformer';
 
 @Entity('users')
@@ -26,11 +30,28 @@ class User {
   @Column()
   avatar: string;
 
+  @Column()
+  plan_id: string;
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'plan_id' })
+  plan: string;
+
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany(
+    () => EnterprisesUsers,
+    enterprisesUsers => enterprisesUsers.user,
+    {
+      cascade: ['insert'],
+      eager: true,
+    },
+  )
+  enterprises_users: EnterprisesUsers[];
 
   @Expose({ name: 'avatar_url' })
   getAvatarUrl(): string | null {

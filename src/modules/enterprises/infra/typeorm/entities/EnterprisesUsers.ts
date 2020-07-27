@@ -1,26 +1,27 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
   JoinColumn,
+  PrimaryGeneratedColumn,
+  ManyToOne,
 } from 'typeorm';
-import User from '@modules/users/infra/typeorm/entities/User';
-import Service from '@modules/services/infra/typeorm/entities/Service';
 
-@Entity('appointments')
-class Appointment {
+import Enterprise from '@modules/enterprises/infra/typeorm/entities/Enterprise';
+import User from '@modules/users/infra/typeorm/entities/User';
+
+@Entity('orders_products')
+class EnterprisesUsers {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  service_id: string;
+  enterprise_id: string;
 
-  @ManyToOne(() => Service)
-  @JoinColumn({ name: 'service_id' })
-  provider: Service;
+  @ManyToOne(() => Enterprise)
+  @JoinColumn({ name: 'enterprise_id' })
+  enterprise: Enterprise;
 
   @Column()
   user_id: string;
@@ -29,8 +30,8 @@ class Appointment {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column('timestamp with time zone')
-  date: Date;
+  @Column()
+  accepted: boolean;
 
   @CreateDateColumn()
   created_at: Date;
@@ -39,4 +40,4 @@ class Appointment {
   updated_at: Date;
 }
 
-export default Appointment;
+export default EnterprisesUsers;

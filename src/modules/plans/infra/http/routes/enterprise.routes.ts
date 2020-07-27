@@ -17,7 +17,6 @@ enterprisesRouter.post(
     [Segments.BODY]: {
       name: Joi.string().required(),
       area: Joi.string().required(),
-      owner_id: Joi.string().uuid().required(),
       address: Joi.string().required(),
       open_hour: Joi.string().required(),
       close_hour: Joi.string().required(),
