@@ -3,13 +3,13 @@ import { MigrationInterface, QueryRunner, TableForeignKey } from 'typeorm';
 export default class AlterFieldProviderToProviderId1588700054218
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
-    await queryRunner.renameColumn('appointments', 'provider', 'provider_id');
+    await queryRunner.renameColumn('appointments', 'user', 'user_id');
 
     await queryRunner.createForeignKey(
       'appointments',
       new TableForeignKey({
         name: 'AppointmentForeignKey',
-        columnNames: ['provider_id'],
+        columnNames: ['user_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'users',
         onDelete: 'SET NULL',

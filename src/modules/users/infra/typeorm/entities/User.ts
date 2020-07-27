@@ -11,6 +11,7 @@ import {
 import uploadConfig from '@config/upload';
 import EnterprisesUsers from '@modules/enterprises/infra/typeorm/entities/EnterprisesUsers';
 import { Exclude, Expose } from 'class-transformer';
+import Plan from '@modules/plans/infra/typeorm/entities/Plan';
 
 @Entity('users')
 class User {
@@ -29,13 +30,6 @@ class User {
 
   @Column()
   avatar: string;
-
-  @Column()
-  plan_id: string;
-
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'plan_id' })
-  plan: string;
 
   @CreateDateColumn()
   created_at: Date;

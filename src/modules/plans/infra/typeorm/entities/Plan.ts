@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import Enterprise from '@modules/enterprises/infra/typeorm/entities/Enterprise';
 
-@Entity('appointments')
+@Entity('plans')
 class Plan {
   @PrimaryGeneratedColumn('uuid')
   id: string;

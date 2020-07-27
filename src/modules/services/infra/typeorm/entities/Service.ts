@@ -44,6 +44,9 @@ class Service {
   @Column()
   time_schedule: string;
 
+  @Column()
+  user_name: string;
+
   @CreateDateColumn()
   created_at: Date;
 
