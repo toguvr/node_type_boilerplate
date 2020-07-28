@@ -1,4 +1,10 @@
-import { Entity, Column, OneToMany, Index } from 'typeorm';
+import {
+  Entity,
+  Column,
+  OneToMany,
+  Index,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import uploadConfig from '@config/upload';
 import { Exclude, Expose } from 'class-transformer';
 import UserPlans from '@modules/plans/infra/typeorm/entities/PlansUsers';
@@ -6,11 +12,18 @@ import Usertoken from '@modules/users/infra/typeorm/entities/UserToken';
 import UsersEnterprises from '@modules/enterprises/infra/typeorm/entities/EnterprisesUsers';
 import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
 import Appointments from '@modules/appointments/infra/typeorm/entities/Appointment';
+import { uuid } from 'uuidv4';
 
 @Index('email', ['email'], { unique: true })
 @Entity('users', { schema: 'nahora' })
 export default class Users {
-  @Column('varchar', { primary: true, name: 'id', length: 36 })
+  @PrimaryGeneratedColumn('uuid')
+  @Column('varchar', {
+    primary: true,
+    name: 'id',
+    length: 36,
+    default: () => 'uuid()',
+  })
   id: string;
 
   @Column('varchar', { name: 'name', length: 255 })
@@ -23,7 +36,7 @@ export default class Users {
   @Exclude()
   password: string;
 
-  @Column('varchar', { name: 'avatar', length: 255 })
+  @Column('varchar', { name: 'avatar', nullable: true, length: 255 })
   avatar: string;
 
   @Column('datetime', { name: 'created_at' })
