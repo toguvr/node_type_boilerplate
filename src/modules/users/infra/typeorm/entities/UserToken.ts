@@ -1,10 +1,17 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import Users from '@modules/users/infra/typeorm/entities/User';
 
 @Index('user_id', ['userId'], {})
 @Entity('usertoken', { schema: 'nahora' })
 export default class Usertoken {
-  @Column('varchar', { primary: true, name: 'id', length: 36 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', { name: 'token', length: 255 })

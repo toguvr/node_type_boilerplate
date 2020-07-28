@@ -1,4 +1,11 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import User from '@modules/users/infra/typeorm/entities/User';
 import Service from '@modules/services/infra/typeorm/entities/Service';
 
@@ -6,7 +13,7 @@ import Service from '@modules/services/infra/typeorm/entities/Service';
 @Index('appointments_users_user_id_fk', ['userId'], {})
 @Entity('appointments', { schema: 'nahora' })
 export default class Appointments {
-  @Column('varchar', { primary: true, name: 'id', length: 36 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', { name: 'service_id', length: 255 })

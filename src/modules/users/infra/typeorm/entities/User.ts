@@ -12,18 +12,11 @@ import Usertoken from '@modules/users/infra/typeorm/entities/UserToken';
 import UsersEnterprises from '@modules/enterprises/infra/typeorm/entities/EnterprisesUsers';
 import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
 import Appointments from '@modules/appointments/infra/typeorm/entities/Appointment';
-import { uuid } from 'uuidv4';
 
 @Index('email', ['email'], { unique: true })
 @Entity('users', { schema: 'nahora' })
 export default class Users {
   @PrimaryGeneratedColumn('uuid')
-  @Column('varchar', {
-    primary: true,
-    name: 'id',
-    length: 36,
-    default: () => 'uuid()',
-  })
   id: string;
 
   @Column('varchar', { name: 'name', length: 255 })
@@ -48,7 +41,10 @@ export default class Users {
   })
   updatedAt: Date;
 
-  @OneToMany(() => Appointments, appointments => appointments.user)
+  @OneToMany(() => Appointments, appointments => appointments.user, {
+    cascade: ['insert'],
+    eager: true,
+  })
   appointments: Appointments[];
 
   @OneToMany(() => Enterprises, enterprises => enterprises.owner)
