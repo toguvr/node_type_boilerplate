@@ -5,42 +5,39 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
 import UserPlans from '@modules/plans/infra/typeorm/entities/PlansUsers';
 
-@Index('plans_enterprises_enterprise_id_fk', ['enterpriseId'], {})
+@Index('plans_enterprises_enterprise_id_fk', ['enterprise_id'], {})
 @Entity('plans', { schema: 'nahora' })
 export default class Plans {
-  @Column('varchar', { primary: true, name: 'id', length: 36 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', { name: 'name', length: 255 })
   name: string;
 
   @Column('varchar', { name: 'enterprise_id', length: 255 })
-  enterpriseId: string;
+  enterprise_id: string;
 
   @Column('decimal', { name: 'price', precision: 10, scale: 2 })
   price: string;
 
   @Column('int', { name: 'schedule_limit', unsigned: true })
-  scheduleLimit: number;
+  schedule_limit: number;
 
-  @Column('timestamp', {
-    name: 'created_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
-  @Column('timestamp', {
-    name: 'updated_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @Column('datetime', { name: 'expiration_date' })
-  expirationDate: Date;
+  expiration_date: Date;
 
   @ManyToOne(() => Enterprises, enterprises => enterprises.plans, {
     onDelete: 'RESTRICT',

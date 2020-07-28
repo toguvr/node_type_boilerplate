@@ -8,6 +8,9 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import Users from '@modules/users/infra/typeorm/entities/User';
 import UsersEnterprises from '@modules/enterprises/infra/typeorm/entities/EnterprisesUsers';
@@ -15,10 +18,10 @@ import Plans from '@modules/plans/infra/typeorm/entities/Plan';
 import Servicecategory from '@modules/services/infra/typeorm/entities/ServiceCategory';
 import UserPlans from '@modules/plans/infra/typeorm/entities/PlansUsers';
 
-@Index('user_enterprises_users_id_fk', ['ownerId'], {})
+@Index('user_enterprises_users_id_fk', ['owner_id'], {})
 @Entity('enterprises', { schema: 'nahora' })
 export default class Enterprises {
-  @Column('varchar', { primary: true, name: 'id', length: 36 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', { name: 'name', length: 255 })
@@ -28,40 +31,38 @@ export default class Enterprises {
   area: string;
 
   @Column('varchar', { name: 'owner_id', length: 255 })
-  ownerId: string;
+  owner_id: string;
 
   @Column('varchar', { name: 'address', length: 255 })
   address: string;
 
   @Column('varchar', { name: 'open_hour', length: 255 })
-  openHour: string;
+  open_hour: string;
 
   @Column('varchar', { name: 'close_hour', length: 255 })
-  closeHour: string;
+  close_hour: string;
 
   @Column('varchar', { name: 'primary_color', length: 255 })
-  primaryColor: string;
+  primary_color: string;
 
   @Column('varchar', { name: 'secondary_color', length: 255 })
-  secondaryColor: string;
+  secondary_color: string;
 
-  @Column('tinyint', { name: 'private', unsigned: true, default: () => "'1'" })
-  private: number;
-
-  @Column('varchar', { name: 'logo', length: 255 })
-  logo: string;
-
-  @Column('timestamp', {
-    name: 'created_at',
-    default: () => 'CURRENT_TIMESTAMP',
+  @Column('tinyint', {
+    name: 'isPrivate',
+    unsigned: true,
+    default: () => "'1'",
   })
-  createdAt: Date;
+  isPrivate: number;
 
-  @Column('timestamp', {
-    name: 'updated_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
+  @Column('varchar', { name: 'logo', nullable: true, length: 255 })
+  logo: string | null;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @ManyToOne(() => Users, users => users.enterprises, {
     onDelete: 'RESTRICT',

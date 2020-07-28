@@ -5,58 +5,55 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import Servicedescription from '@modules/services/infra/typeorm/entities/ServiceDescription';
 import Servicecategory from '@modules/services/infra/typeorm/entities/ServiceCategory';
 import Appointments from '@modules/appointments/infra/typeorm/entities/Appointment';
 
-@Index('pending_scheduling', ['pendingScheduling'], {})
-@Index('service_categories_category_id_fk', ['categoryId'], {})
-@Index('service_descriptions_description_id_fk', ['descriptionId'], {})
+@Index('pending_scheduling', ['pending_scheduling'], {})
+@Index('service_categories_category_id_fk', ['category_id'], {})
+@Index('service_descriptions_description_id_fk', ['description_id'], {})
 @Entity('services', { schema: 'nahora' })
 export default class Services {
-  @Column('varchar', { primary: true, name: 'id', length: 36 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', { name: 'start_hour', length: 255 })
-  startHour: string;
+  start_hour: string;
 
   @Column('varchar', { name: 'description_id', length: 255 })
-  descriptionId: string;
+  description_id: string;
 
   @Column('varchar', { name: 'category_id', length: 255 })
-  categoryId: string;
+  category_id: string;
 
   @Column('int', { name: 'capacity', unsigned: true })
   capacity: number;
 
   @Column('int', { name: 'day_week', unsigned: true })
-  dayWeek: number;
+  day_week: number;
 
   @Column('tinyint', {
     name: 'pending_scheduling',
     unsigned: true,
     default: () => "'0'",
   })
-  pendingScheduling: number;
+  pending_scheduling: number;
 
   @Column('varchar', { name: 'time_schedule', length: 255 })
-  timeSchedule: string;
+  time_schedule: string;
 
   @Column('varchar', { name: 'user_name', length: 255 })
-  userName: string;
+  user_name: string;
 
-  @Column('timestamp', {
-    name: 'created_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
-  @Column('timestamp', {
-    name: 'updated_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @OneToMany(() => Appointments, appointments => appointments.service)
   appointments: Appointments[];

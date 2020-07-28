@@ -1,22 +1,37 @@
 import { Request, Response } from 'express';
 
-import CreateAppointmentService from '@modules/appointments/services/CreateAppointmentService';
+import CreateEnterpriseService from '@modules/enterprises/services/CreateEnterpriseService';
 
 import { container } from 'tsyringe';
 
 export default class EnterpriseController {
   public async create(request: Request, response: Response): Promise<Response> {
-    const user_id = request.user.id;
-    const { provider_id, date } = request.body;
+    const owner_id = request.user.id;
+    const {
+      name,
+      area,
+      address,
+      open_hour,
+      close_hour,
+      primary_color,
+      secondary_color,
+      isPrivate,
+    } = request.body;
 
-    const createAppointment = container.resolve(CreateAppointmentService);
+    const createEnterprise = container.resolve(CreateEnterpriseService);
 
-    const appointment = await createAppointment.execute({
-      date,
-      provider_id,
-      user_id,
+    const enterprise = await createEnterprise.execute({
+      name,
+      area,
+      address,
+      open_hour,
+      close_hour,
+      primary_color,
+      secondary_color,
+      isPrivate,
+      owner_id,
     });
 
-    return response.json(appointment);
+    return response.json(enterprise);
   }
 }

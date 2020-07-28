@@ -1,44 +1,50 @@
-import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  UpdateDateColumn,
+  CreateDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
 import Users from '@modules/users/infra/typeorm/entities/User';
 import Plans from '@modules/plans/infra/typeorm/entities/Plan';
 
 @Index('active', ['active'], {})
-@Index('user_plans_users_id_fk', ['userId'], {})
-@Index('user_plans_plans_id_fk', ['planId'], {})
-@Index('user_plans_enterprise_id_fk', ['enterpriseId'], {})
+@Index('user_plans_users_id_fk', ['user_id'], {})
+@Index('user_plans_plans_id_fk', ['plan_id'], {})
+@Index('user_plans_enterprise_id_fk', ['enterprise_id'], {})
 @Entity('user_plans', { schema: 'nahora' })
 export default class UserPlans {
-  @Column('varchar', { primary: true, name: 'id', length: 255 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', { name: 'user_id', length: 255 })
-  userId: string;
+  user_id: string;
 
   @Column('varchar', { name: 'plan_id', length: 255 })
-  planId: string;
+  plan_id: string;
 
   @Column('varchar', { name: 'enterprise_id', length: 255 })
-  enterpriseId: string;
+  enterprise_id: string;
 
-  @Column('datetime', { name: 'created_at' })
-  createdAt: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
-  @Column('datetime', {
-    name: 'updated_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @Column('datetime', { name: 'canceled_at', nullable: true })
-  canceledAt: Date | null;
+  canceled_at: Date | null;
 
   @Column('datetime', { name: 'paused_at', nullable: true })
-  pausedAt: Date | null;
+  paused_at: Date | null;
 
   @Column('datetime', { name: 'expiration_at', nullable: true })
-  expirationAt: Date | null;
+  expiration_at: Date | null;
 
   @Column('tinyint', { name: 'active', unsigned: true, default: () => "'1'" })
   active: number;

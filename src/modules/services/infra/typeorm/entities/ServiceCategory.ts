@@ -5,33 +5,30 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  CreateDateColumn,
 } from 'typeorm';
 import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
 import Services from '@modules/services/infra/typeorm/entities/Service';
 
-@Index('enterprise_categories_enterprise_id_fk', ['enterpriseId'], {})
+@Index('enterprise_categories_enterprise_id_fk', ['enterprise_id'], {})
 @Entity('servicecategory', { schema: 'nahora' })
 export default class Servicecategory {
-  @Column('varchar', { primary: true, name: 'id', length: 36 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', { name: 'enterprise_id', length: 255 })
-  enterpriseId: string;
+  enterprise_id: string;
 
   @Column('varchar', { name: 'name', length: 255 })
   name: string;
 
-  @Column('timestamp', {
-    name: 'created_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
-  @Column('timestamp', {
-    name: 'updated_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @ManyToOne(() => Enterprises, enterprises => enterprises.servicecategories, {
     onDelete: 'RESTRICT',

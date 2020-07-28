@@ -4,6 +4,8 @@ import {
   OneToMany,
   Index,
   PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import uploadConfig from '@config/upload';
 import { Exclude, Expose } from 'class-transformer';
@@ -30,27 +32,28 @@ export default class Users {
   password: string;
 
   @Column('varchar', { name: 'avatar', nullable: true, length: 255 })
-  avatar: string;
+  avatar: string | null;
 
-  @Column('datetime', { name: 'created_at' })
-  createdAt: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
-  @Column('timestamp', {
-    name: 'updated_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 
-  @OneToMany(() => Appointments, appointments => appointments.user, {
-    cascade: ['insert'],
-    eager: true,
-  })
+  @OneToMany(() => Appointments, appointments => appointments.user)
   appointments: Appointments[];
 
   @OneToMany(() => Enterprises, enterprises => enterprises.owner)
   enterprises: Enterprises[];
 
-  @OneToMany(() => UsersEnterprises, usersEnterprises => usersEnterprises.user)
+  @OneToMany(
+    () => UsersEnterprises,
+    usersEnterprises => usersEnterprises.user,
+    {
+      cascade: true,
+      eager: true,
+    },
+  )
   usersEnterprises: UsersEnterprises[];
 
   @OneToMany(() => Usertoken, usertoken => usertoken.user)

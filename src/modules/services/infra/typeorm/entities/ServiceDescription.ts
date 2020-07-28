@@ -1,9 +1,16 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  CreateDateColumn,
+} from 'typeorm';
 import Services from '@modules/services/infra/typeorm/entities/Service';
 
 @Entity('servicedescription', { schema: 'nahora' })
 export default class Servicedescription {
-  @Column('varchar', { primary: true, name: 'id', length: 36 })
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('varchar', { name: 'title', length: 255 })
@@ -12,17 +19,11 @@ export default class Servicedescription {
   @Column('varchar', { name: 'description', length: 255 })
   description: string;
 
-  @Column('timestamp', {
-    name: 'created_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  createdAt: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
-  @Column('timestamp', {
-    name: 'updated_at',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
-  updatedAt: Date;
+  @UpdateDateColumn()
+  updated_at: Date;
 
   @OneToMany(() => Services, services => services.description)
   services: Services[];
