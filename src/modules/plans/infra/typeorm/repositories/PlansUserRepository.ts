@@ -19,9 +19,10 @@ class PlansUserRepository implements IPlansUserRepository {
 
   public async findByActive(
     recipient_id: string,
+    enterprise_id: string,
   ): Promise<PlansUsers | undefined> {
     const plan = await this.ormRepository.findOne({
-      where: { active: 1, user_id: recipient_id },
+      where: { active: 1, user_id: recipient_id, enterprise_id },
     });
 
     return plan;

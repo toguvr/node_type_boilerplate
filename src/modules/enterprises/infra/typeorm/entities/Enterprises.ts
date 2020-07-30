@@ -19,6 +19,7 @@ import Servicecategory from '@modules/services/infra/typeorm/entities/ServiceCat
 import UserPlans from '@modules/plans/infra/typeorm/entities/PlansUsers';
 import ServiceDescription from '@modules/services/infra/typeorm/entities/ServiceDescription';
 import Service from '@modules/services/infra/typeorm/entities/Service';
+import Appointments from '@modules/appointments/infra/typeorm/entities/Appointment';
 
 @Index('user_enterprises_users_id_fk', ['owner_id'], {})
 @Entity('enterprises', { schema: 'nahora' })
@@ -99,6 +100,9 @@ export default class Enterprises {
 
   @OneToMany(() => UserPlans, userPlans => userPlans.enterprise)
   userPlans: UserPlans[];
+
+  @OneToMany(() => Appointments, appointments => appointments.enterprise)
+  appointments: Appointments[];
 
   @Expose({ name: 'logo_url' })
   getLogoUrl(): string | null {

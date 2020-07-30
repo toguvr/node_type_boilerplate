@@ -10,17 +10,17 @@ const appointmentsController = new AppointmentsController();
 
 appointmentsRouter.use(ensureAuthenticated);
 
+appointmentsRouter.get('/me', appointmentsController.index);
+
 appointmentsRouter.post(
   '/',
   celebrate({
     [Segments.BODY]: {
       service_id: Joi.string().uuid().required(),
-      date: Joi.date(),
+      enterprise_id: Joi.string().uuid().required(),
     },
   }),
   appointmentsController.create,
 );
-
-appointmentsRouter.get('/me', appointmentsController.index);
 
 export default appointmentsRouter;

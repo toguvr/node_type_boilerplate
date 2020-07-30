@@ -101,10 +101,13 @@ class CreatePlansUsersService {
       throw new AppError('Plan does not exists.');
     }
 
-    const oldPlan = await this.plansUserRepository.findByActive(recipient_id);
+    const oldPlan = await this.plansUserRepository.findByActive(
+      recipient_id,
+      enterprise.id,
+    );
 
     if (oldPlan) {
-      throw new AppError('User has an active plan.');
+      throw new AppError('User has an active plan in this enterprise.');
     }
 
     const expirationDate = addDays(new Date(), Number(plan.days_to_expire));

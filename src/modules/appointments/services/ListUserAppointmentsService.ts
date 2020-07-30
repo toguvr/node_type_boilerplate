@@ -24,7 +24,7 @@ class ListProviderService {
     //   `providers-list:${user_id}`,
     // );
     // if (!users) {
-    const appointments = await this.appointmentsRepository.findAllInDayFromUser(
+    const appointments = await this.appointmentsRepository.findAllFromUser(
       user_id,
     );
 
