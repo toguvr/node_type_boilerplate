@@ -12,14 +12,19 @@ import {
 import Servicedescription from '@modules/services/infra/typeorm/entities/ServiceDescription';
 import Servicecategory from '@modules/services/infra/typeorm/entities/ServiceCategory';
 import Appointments from '@modules/appointments/infra/typeorm/entities/Appointment';
+import Enterprises from '@modules/enterprises/infra/typeorm/entities/Enterprises';
 
 @Index('pending_scheduling', ['pending_scheduling'], {})
+@Index('enterprise_service_enterprise_id_fk', ['enterprise_id'], {})
 @Index('service_categories_category_id_fk', ['category_id'], {})
 @Index('service_descriptions_description_id_fk', ['description_id'], {})
 @Entity('services', { schema: 'nahora' })
 export default class Services {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column('varchar', { name: 'enterprise_id', length: 255 })
+  enterprise_id: string;
 
   @Column('varchar', { name: 'start_hour', length: 255 })
   start_hour: string;
@@ -43,11 +48,8 @@ export default class Services {
   })
   pending_scheduling: number;
 
-  @Column('varchar', { name: 'time_schedule', length: 255 })
-  time_schedule: string;
-
-  @Column('varchar', { name: 'user_name', length: 255 })
-  user_name: string;
+  @Column('int', { name: 'hour_to_schedule' })
+  hour_to_schedule: number;
 
   @CreateDateColumn()
   created_at: Date;
@@ -73,4 +75,11 @@ export default class Services {
   )
   @JoinColumn([{ name: 'description_id', referencedColumnName: 'id' }])
   description: Servicedescription;
+
+  @ManyToOne(() => Enterprises, enterprises => enterprises.services, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'enterprise_id', referencedColumnName: 'id' }])
+  enterprise: Enterprises;
 }

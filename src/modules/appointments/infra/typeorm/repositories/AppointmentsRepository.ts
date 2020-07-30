@@ -43,12 +43,7 @@ class AppointmentsRepository implements IAppointmentsRepository {
     return appointments;
   }
 
-  public async findAllInDayFromProvider({
-    provider_id,
-    day,
-    month,
-    year,
-  }: IFindAllInDayFromProviderDTO): Promise<Appointment[]> {
+  public async findAllInDayFromUser(user_id: string): Promise<Appointment[]> {
     const parsedDay = String(day).padStart(2, '0');
     const parsedMonth = String(month).padStart(2, '0');
     const appointments = this.ormRepository.find({

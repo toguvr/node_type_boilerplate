@@ -12,6 +12,7 @@ const enterprisesRouter = Router();
 const upload = multer(uploadConfig.multer);
 const enterprisesController = new EnterprisesController();
 const enterpriseLogoController = new EnterpriseLogoController();
+
 enterprisesRouter.use(ensureAuthenticated);
 
 enterprisesRouter.post(
@@ -29,6 +30,16 @@ enterprisesRouter.post(
     },
   }),
   enterprisesController.create,
+);
+
+enterprisesRouter.get(
+  '/:name/search',
+  celebrate({
+    [Segments.PARAMS]: {
+      name: Joi.string().required(),
+    },
+  }),
+  enterprisesController.show,
 );
 
 enterprisesRouter.patch(

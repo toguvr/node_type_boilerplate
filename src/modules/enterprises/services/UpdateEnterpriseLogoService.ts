@@ -15,8 +15,8 @@ interface IRequest {
 @injectable()
 class UpdateEnterpriseLogoService {
   constructor(
-    @inject('EnteprisesRepository')
-    private enteprisesRepository: IEnterprisesRepository,
+    @inject('EnterprisesRepository')
+    private enterprisesRepository: IEnterprisesRepository,
 
     @inject('StorageProvider')
     private storageProvider: IStorageProvider,
@@ -26,7 +26,7 @@ class UpdateEnterpriseLogoService {
     user_id,
     avatarFilename,
   }: IRequest): Promise<Enterprises> {
-    const enterprise = await this.enteprisesRepository.findByOwnerId(user_id);
+    const enterprise = await this.enterprisesRepository.findByOwnerId(user_id);
 
     if (!enterprise) {
       throw new AppError('You are not the owner of this enterprise.', 401);
@@ -42,7 +42,7 @@ class UpdateEnterpriseLogoService {
 
     enterprise.logo = filename;
 
-    await this.enteprisesRepository.save(enterprise);
+    await this.enterprisesRepository.save(enterprise);
 
     return enterprise;
   }

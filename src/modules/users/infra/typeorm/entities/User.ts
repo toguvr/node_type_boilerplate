@@ -49,10 +49,10 @@ export default class Users {
   @OneToMany(
     () => UsersEnterprises,
     usersEnterprises => usersEnterprises.user,
-    {
-      cascade: true,
-      eager: true,
-    },
+    // {
+    //   cascade: true,
+    //   eager: true,
+    // },
   )
   usersEnterprises: UsersEnterprises[];
 

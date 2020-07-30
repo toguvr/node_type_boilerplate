@@ -17,6 +17,8 @@ import UsersEnterprises from '@modules/enterprises/infra/typeorm/entities/Enterp
 import Plans from '@modules/plans/infra/typeorm/entities/Plan';
 import Servicecategory from '@modules/services/infra/typeorm/entities/ServiceCategory';
 import UserPlans from '@modules/plans/infra/typeorm/entities/PlansUsers';
+import ServiceDescription from '@modules/services/infra/typeorm/entities/ServiceDescription';
+import Service from '@modules/services/infra/typeorm/entities/Service';
 
 @Index('user_enterprises_users_id_fk', ['owner_id'], {})
 @Entity('enterprises', { schema: 'nahora' })
@@ -79,6 +81,15 @@ export default class Enterprises {
     servicecategory => servicecategory.enterprise,
   )
   servicecategories: Servicecategory[];
+
+  @OneToMany(
+    () => ServiceDescription,
+    servicedescription => servicedescription.enterprise,
+  )
+  servicedescription: ServiceDescription[];
+
+  @OneToMany(() => Service, services => services.enterprise)
+  services: Service[];
 
   @OneToMany(
     () => UsersEnterprises,

@@ -30,14 +30,14 @@ export default class Plans {
   @Column('int', { name: 'schedule_limit', unsigned: true })
   schedule_limit: number;
 
+  @Column('int', { name: 'days_to_expire', unsigned: true })
+  days_to_expire: number;
+
   @CreateDateColumn()
   created_at: Date;
 
   @UpdateDateColumn()
   updated_at: Date;
-
-  @Column('datetime', { name: 'expiration_date' })
-  expiration_date: Date;
 
   @ManyToOne(() => Enterprises, enterprises => enterprises.plans, {
     onDelete: 'RESTRICT',

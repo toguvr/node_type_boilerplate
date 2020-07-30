@@ -65,7 +65,7 @@ export default class UserPlans {
 
   @ManyToOne(() => Users, users => users.userPlans, {
     onDelete: 'RESTRICT',
-    onUpdate: 'CASCADE',
+    onUpdate: 'RESTRICT',
   })
   @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
   user: Users;

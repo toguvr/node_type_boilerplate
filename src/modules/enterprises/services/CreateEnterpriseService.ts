@@ -1,5 +1,3 @@
-import { format } from 'date-fns';
-
 import AppError from '@shared/errors/AppError';
 
 import { inject, injectable } from 'tsyringe';
@@ -21,8 +19,8 @@ interface IRequest {
 @injectable()
 class CreateEnterpriseService {
   constructor(
-    @inject('EnteprisesRepository')
-    private enteprisesRepository: IEnterprisesRepository,
+    @inject('EnterprisesRepository')
+    private enterprisesRepository: IEnterprisesRepository,
   ) {}
 
   public async execute({
@@ -36,7 +34,13 @@ class CreateEnterpriseService {
     isPrivate,
     owner_id,
   }: IRequest): Promise<Enterprises> {
-    const enterprise = await this.enteprisesRepository.create({
+    const hasOwner = await this.enterprisesRepository.findByOwnerId(owner_id);
+
+    if (hasOwner) {
+      throw new AppError('You already owns a company.');
+    }
+
+    const enterprise = await this.enterprisesRepository.create({
       name,
       area,
       address,
@@ -47,7 +51,6 @@ class CreateEnterpriseService {
       isPrivate,
       owner_id,
     });
-
     return enterprise;
   }
 }
