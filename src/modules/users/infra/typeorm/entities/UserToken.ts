@@ -1,22 +1,27 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  CreateDateColumn,
+  Entity,
+  Index,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
+  CreateDateColumn,
   Generated,
 } from 'typeorm';
+import Users from '@modules/users/infra/typeorm/entities/User';
 
-@Entity('user_tokens')
-class UserToken {
+@Index('user_id', ['user_id'], {})
+@Entity('usertoken', { schema: 'nahora' })
+export default class Usertoken {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column('varchar', { name: 'token', length: 255 })
   @Generated('uuid')
   token: string;
 
-  @Column()
+  @Column('varchar', { name: 'user_id', length: 255 })
   user_id: string;
 
   @CreateDateColumn()
@@ -24,6 +29,11 @@ class UserToken {
 
   @UpdateDateColumn()
   updated_at: Date;
-}
 
-export default UserToken;
+  @ManyToOne(() => Users, users => users.usertokens, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'RESTRICT',
+  })
+  @JoinColumn([{ name: 'user_id', referencedColumnName: 'id' }])
+  user: Users;
+}
